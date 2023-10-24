@@ -1,332 +1,305 @@
-// C++ program to illustrate bookshop
-// management system using File Handling
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 using namespace std;
 
-// Bookshop Class
-class bookshope {
+// MyBookstore Class
+class MyBookstore {
 public:
-	void control_panel();
-	void add_book();
-	void show_book();
-	void check_book();
-	void update_book();
-	void del_book();
+    void showMenu();
+    void addBook();
+    void displayBooks();
+    void checkBook();
+    void updateBook();
+    void deleteBook();
 };
 
 // Function to display the menus
-void bookshope::control_panel()
-{
-	system("cls");
-	cout << "\n\n\t\t\t\tCONTROL PANEL";
-	cout << "\n\n1. ADD BOOK";
-	cout << "\n2. DISPLAY BOOKS";
-	cout << "\n3. CHECK PARTICULAR BOOK";
-	cout << "\n4. UPDATE BOOK";
-	cout << "\n5. DELETE BOOK";
-	cout << "\n6. EXIT";
+void MyBookstore::showMenu() {
+    system("cls");
+    cout << "\n\n\t\t\t\tMY BOOKSTORE MENU";
+    cout << "\n\n1. Add a book in the library";
+    cout << "\n2. Display the books in the library";
+    cout << "\n3. Check for a particular book";
+    cout << "\n4. Update a book";
+    cout << "\n5. Delete a book";
+    cout << "\n6. EXIT";
 }
 
-// Function to add book
-void bookshope::add_book()
-{
-	system("cls");
-	fstream file;
-	int no_copy;
-	string b_name, a_name, b_id;
-	cout << "\n\n\t\t\t\tADD BOOKS";
-	cout << "\n\nBook ID : ";
-	cin >> b_id;
-	cout << "\nBook Name : ";
-	cin >> b_name;
-	cout << "\nAuthor Name : ";
-	cin >> a_name;
-	cout << "\nNo. of Books : ";
-	cin >> no_copy;
+// Function to add a book
+void MyBookstore::addBook() {
+    system("cls");
+    fstream file;
+    int numCopies;
+    string bookName, authorName, bookID;
+    cout << "\n\n\t\t\t\tADD BOOK";
+    cout << "\n\nBook ID : ";
+    cin >> bookID;
+    cout << "\nBook Name : ";
+    cin >> bookName;
+    cout << "\nAuthor Name : ";
+    cin >> authorName;
+    cout << "\nNumber of Copies : ";
+    cin >> numCopies;
 
-	// Open file in append or
-	// output mode
-	file.open("D:// book.txt",
-			ios::out | ios::app);
-	file << " " << b_id << " "
-		<< b_name << " " << a_name
-		<< " " << no_copy << "\n";
-	file.close();
+    // Open the file in append or output mode
+    file.open("D://book.txt", ios::out | ios::app);
+    file << " " << bookID << " "
+         << bookName << " " << authorName
+         << " " << numCopies << "\n";
+    file.close();
 }
 
-// Function to display book
-void bookshope::show_book()
-{
-	system("cls");
-	fstream file;
-	int no_copy;
-	string b_name, b_id, a_name;
-	cout << "\n\n\t\t\t\t\tAll BOOKS";
+// Function to display books
+void MyBookstore::displayBooks() {
+    system("cls");
+    fstream file;
+    int numCopies;
+    string bookName, bookID, authorName;
+    cout << "\n\n\t\t\t\t\tALL BOOKS";
 
-	// Open the file in input mode
-	file.open("D:// book.txt", ios::in);
-	if (!file)
-		cout << "\n\nFile Opening Error!";
-	else {
+    // Open the file in input mode
+    file.open("D://book.txt", ios::in);
+    if (!file)
+        cout << "\n\nFile Opening Error!";
+    else {
+        cout << "\n\n\nBook ID\t\tBook"
+            << "\t\tAuthor\t\tNo. of "
+            "Books\n\n";
+        file >> bookID >> bookName;
+        file >> authorName >> numCopies;
 
-		cout << "\n\n\nBook ID\t\tBook"
-			<< "\t\tAuthor\t\tNo. of "
-				"Books\n\n";
-		file >> b_id >> b_name;
-		file >> a_name >> no_copy;
+        // Until the end of the file is reached
+        while (!file.eof()) {
+            cout << " " << bookID
+                << "\t\t" << bookName
+                << "\t\t" << authorName
+                << "\t\t" << numCopies
+                << "\n\n";
+            file >> bookID >> bookName;
+            file >> authorName >> numCopies;
+        }
 
-		// Till end of file is reached
-		while (!file.eof()) {
+        system("pause");
 
-			cout << " " << b_id
-				<< "\t\t" << b_name
-				<< "\t\t" << a_name
-				<< "\t\t" << no_copy
-				<< "\n\n";
-			file >> b_id >> b_name;
-			file >> a_name >> no_copy;
-		}
-
-		system("pause");
-
-		// Close the file
-		file.close();
-	}
+        // Close the file
+        file.close();
+    }
 }
 
-// Function to check the book
-void bookshope::check_book()
-{
-	system("cls");
-	fstream file;
-	int no_copy, count = 0;
-	string b_id, b_name, a_name, b_idd;
+// Function to check a book
+void MyBookstore::checkBook() {
+    system("cls");
+    fstream file;
+    int numCopies, count = 0;
+    string bookID, bookName, authorName, inputBookID;
 
-	cout << "\n\n\t\t\t\tCheck "
-		<< "Particular Book";
+    cout << "\n\n\t\t\t\tCheck for a Particular Book";
 
-	// Open the file in input mode
-	file.open("D:// book.txt", ios::in);
-	if (!file)
-		cout << "\n\nFile Opening Error!";
-	else {
+    // Open the file in input mode
+    file.open("D://book.txt", ios::in);
+    if (!file)
+        cout << "\n\nFile Opening Error!";
+    else {
+        cout << "\n\nBook ID : ";
+        cin >> inputBookID;
+        file >> bookID >> bookName;
+        file >> authorName >> numCopies;
 
-		cout << "\n\nBook ID : ";
-		cin >> b_idd;
-		file >> b_id >> b_name;
-		file >> a_name >> no_copy;
-
-		while (!file.eof()) {
-
-			if (b_idd == b_id) {
-
-				system("cls");
-				cout << "\n\n\t\t\t\t"
-					<< "Check Particular Book";
-				cout << "\n\nBook ID : "
-					<< b_id;
-				cout << "\nName : "
-					<< b_name;
-				cout << "\nAuthor : "
-					<< a_name;
-				cout << "\nNo. of Books : "
-					<< no_copy;
-				cout << endl
-					<< endl;
-				count++;
-				break;
-			}
-			file >> b_id >> b_name;
-			file >> a_name >> no_copy;
-		}
-		system("pause");
-		file.close();
-		if (count == 0)
-			cout << "\n\nBook ID Not"
-				<< " Found...";
-	}
+        while (!file.eof()) {
+            if (inputBookID == bookID) {
+                system("cls");
+                cout << "\n\n\t\t\t\t"
+                    << "Check for a Particular Book";
+                cout << "\n\nBook ID : " << bookID;
+                cout << "\nName : " << bookName;
+                cout << "\nAuthor : " << authorName;
+                cout << "\nNo. of Copies : " << numCopies;
+                cout << endl << endl;
+                count++;
+                break;
+            }
+            file >> bookID >> bookName;
+            file >> authorName >> numCopies;
+        }
+        system("pause");
+        file.close();
+        if (count == 0)
+            cout << "\n\nBook ID Not Found...";
+    }
 }
 
-// Function to update the book
-void bookshope::update_book()
-{
-	system("cls");
-	fstream file, file1;
-	int no_copy, no_co, count = 0;
-	string b_name, b_na, a_name;
-	string a_na, b_idd, b_id;
+// Function to update a book
+void MyBookstore::updateBook() {
+    system("cls");
+    fstream file, file1;
+    int numCopies, newNumCopies, count = 0;
+    string bookName, newBookName, authorName;
+    string newAuthorName, bookIDd, bookID;
 
-	cout << "\n\n\t\t\t\tUpdate Book Record";
-	file1.open("D:// book1.txt",
-			ios::app | ios::out);
-	file.open("D:// book.txt", ios::in);
+    cout << "\n\n\t\t\t\tUpdate Book Record";
+    file1.open("D://book1.txt", ios::app | ios::out);
+    file.open("D://book.txt", ios::in);
+    if (!file)
+        cout << "\n\nFile Opening Error!";
+    else {
+        cout << "\n\nBook ID : ";
+        cin >> bookID;
+        file >> bookIDd >> bookName;
+        file >> authorName >> numCopies;
 
-	if (!file)
-		cout << "\n\nFile Opening Error!";
-	else {
+        // Until the end of the file is reached
+        while (!file.eof()) {
+            if (bookID == bookIDd) {
+                system("cls");
+                cout << "\t\t\t\t"
+                    << "Update Book Record";
+                cout << "\n\nNew Book Name : ";
+                cin >> newBookName;
+                cout << "\nAuthor Name : ";
+                cin >> newAuthorName;
+                cout << "\nNo. of Copies : ";
+                cin >> newNumCopies;
+                file1 << " " << bookID << " "
+                    << newBookName << " "
+                    << newAuthorName << " " << newNumCopies
+                    << "\n\n";
+                count++;
+            }
+            else
+                file1 << " " << bookIDd
+                    << " " << bookName
+                    << " " << authorName
+                    << " " << numCopies
+                    << "\n\n";
+            file >> bookIDd >> bookName;
+            file >> authorName >> numCopies;
+        }
+        if (count == 0)
+            cout << "\n\nBook ID"
+                << " Not Found...";
+    }
+    cout << endl;
+    system("pause");
 
-		cout << "\n\nBook ID : ";
-		cin >> b_id;
-		file >> b_idd >> b_name;
-		file >> a_name >> no_copy;
-
-		// Till end of file is reached
-		while (!file.eof()) {
-			if (b_id == b_idd) {
-				system("cls");
-				cout << "\t\t\t\t"
-					<< "Update Book Record";
-				cout << "\n\nNew Book Name : ";
-				cin >> b_na;
-				cout << "\nAuthor Name : ";
-				cin >> a_na;
-				cout << "\nNo. of Books : ";
-				cin >> no_co;
-				file1 << " " << b_id << " "
-					<< b_na << " "
-					<< a_na << " " << no_co
-					<< "\n\n";
-				count++;
-			}
-			else
-				file1 << " " << b_idd
-					<< " " << b_name
-					<< " " << a_name
-					<< " " << no_copy
-					<< "\n\n";
-			file >> b_idd >> b_name;
-			file >> a_name >> no_copy;
-		}
-		if (count == 0)
-			cout << "\n\nBook ID"
-				<< " Not Found...";
-	}
-	cout << endl;
-	system("pause");
-
-	// Close the files
-	file.close();
-	file1.close();
-	remove("D:// book.txt");
-	rename("D:// book1.txt",
-		"D:// book.txt");
+    // Close the files
+    file.close();
+    file1.close();
+    remove("D://book.txt");
+    rename("D://book1.txt",
+        "D://book.txt");
 }
 
-// Function to delete book
-void bookshope::del_book()
-{
-	system("cls");
-	fstream file, file1;
-	int no_copy, count = 0;
-	string b_id, b_idd, b_name, a_name;
-	cout << "\n\n\t\t\t\tDelete a Book";
+// Function to delete a book
+void MyBookstore::deleteBook() {
+    system("cls");
+    fstream file, file1;
+    int numCopies, count = 0;
+    string bookID, bookIDd, bookName, authorName;
+    string inputBookID;
 
-	// Append file in output mode
-	file1.open("D:// book1.txt",
-			ios::app | ios::out);
-	file.open("D:// book.txt",
-			ios::in);
+    cout << "\n\n\t\t\t\tDelete a Book";
 
-	if (!file)
-		cout << "\n\nFile Opening Error...";
-	else {
+    // Append file in output mode
+    file1.open("D://book1.txt", ios::app | ios::out);
+    file.open("D://book.txt", ios::in);
 
-		cout << "\n\nBook ID : ";
-		cin >> b_id;
-		file >> b_idd >> b_name;
-		file >> a_name >> no_copy;
-		while (!file.eof()) {
+    if (!file)
+        cout << "\n\nFile Opening Error...";
+    else {
+        cout << "\n\nBook ID : ";
+        cin >> inputBookID;
+        file >> bookIDd >> bookName;
+        file >> authorName >> numCopies;
 
-			if (b_id == b_idd) {
+        while (!file.eof()) {
 
-				system("cls");
-				cout << "\n\n\t\t\t\t"
-					<< "Delete a Book";
-				cout << "\n\nBook is Deleted "
-						"Successfully...\n\n";
-				count++;
-			}
-			else
-				file1 << " " << b_idd
-					<< " " << b_name
-					<< " " << a_name
-					<< " " << no_copy
-					<< "\n\n";
-			file >> b_idd >> b_name;
-			file >> a_name >> no_copy;
-		}
-		if (count == 0)
-			cout << "\n\nBook ID "
-				<< "Not Found...";
-	}
-	system("pause");
+            if (inputBookID == bookIDd) {
 
-	// Close the file
-	file.close();
-	file1.close();
-	remove("D:// book.txt");
-	rename("D:// book1.txt",
-		"D:// book.txt");
+                system("cls");
+                cout << "\n\n\t\t\t\t"
+                    << "Delete a Book";
+                cout << "\n\nBook is Deleted "
+                    "Successfully...\n\n";
+                count++;
+            }
+            else
+                file1 << " " << bookIDd
+                    << " " << bookName
+                    << " " << authorName
+                    << " " << numCopies
+                    << "\n\n";
+            file >> bookIDd >> bookName;
+            file >> authorName >> numCopies;
+        }
+        if (count == 0)
+            cout << "\n\nBook ID "
+                << "Not Found...";
+    }
+    system("pause");
+
+    // Close the file
+    file.close();
+    file1.close();
+    remove("D://book.txt");
+    rename("D://book1.txt",
+        "D://book.txt");
 }
 
-// Function for book shop record
-void bookShopRecord()
-{
-	int choice;
-	char x;
-	bookshope b;
+// Function for the bookshop record
+void bookShopRecord() {
+    int choice;
+    char x;
+    MyBookstore b;
 
-	while (1) {
+    while (1) {
 
-		b.control_panel();
-		cout << "\n\nEnter your choice : ";
-		cin >> choice;
-		switch (choice) {
+        b.showMenu();
+        cout << "\n\nEnter your choice : ";
+        cin >> choice;
+        switch (choice) {
 
-		case 1:
-			do {
+        case 1:
+            do {
 
-				b.add_book();
-				cout << "\n\nWant to add"
-					<< " another book? "
-						"(y/n) : ";
-				cin >> x;
-			} while (x == 'y');
-			break;
+                b.addBook();
+                cout << "\n\nWant to add"
+                    << " another book? "
+                    << "(y/n) : ";
+                cin >> x;
+            } while (x == 'y');
+            break;
 
-		case 2:
-			b.show_book();
-			break;
+        case 2:
+            b.displayBooks();
+            break;
 
-		case 3:
-			b.check_book();
-			break;
-		case 4:
-			b.update_book();
-			break;
+        case 3:
+            b.checkBook();
+            break;
+        case 4:
+            b.updateBook();
+            break;
 
-		case 5:
-			b.del_book();
-			break;
+        case 5:
+            b.deleteBook();
+            break;
 
-		case 6:
-			exit(0);
-			break;
+        case 6:
+            exit(0);
+            break;
 
-		default:
-			cout << "\n\nINVALID CHOICE\n";
-		}
-	}
+        default:
+            cout << "\n\nINVALID CHOICE\n";
+        }
+    }
 }
 
 // Driver Code
-int main()
-{
-	// Function Call
-	bookShopRecord();
+int main() {
+    // Function Call
+    bookShopRecord();
 
-	return 0;
+    return 0;
 }
